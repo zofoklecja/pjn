@@ -1,0 +1,31 @@
+1. Błędne/poprawne
+
+Podaj polecenie (potok), który zapisze do pliku edits.txt pary składające się z błędnego wyrazu i jego poprawnej wersji oddzielone znakiem tabulacji mając jako plik wejściowy korpus errors.m2. Należy wziąć pod uwagę poprawki będące wstawieniami lub usunięciami wyrazów, tzn. zarówno wyraz błędny, jak i wyraz poprawny mogą być puste (to jest uproszczenie).
+Plik errors.m2 do pobrania tutaj: https://eduwiki.wmi.amu.edu.pl/filipg/PJN-2015?action=AttachFile&do=get&target=errors.m2
+Format pliku jest następujący: linie rozpoczynające się od S to zdania, poniżej których znajduje się zero lub więcej adnotacji błędów, każda w postaci:
+"A [spacja] pozycja [tabulacja] wyraz błędny => wyraz poprawny [tabulacja] typ błędu"
+
+cat errors.m2 | grep -P "^A" | cut -f2 | sed -e 's/ => /\t/g' > edits.txt
+
+
+2. Procent
+
+Chcemy dowiedzieć się ile procentowo jest błędów w przykładowym korpusie errors.m2. W tym celu konieczne jest określenie (1) liczby błędnych wyrazów (możemy dla uproszczenia przyjąć, że adnotacje dotyczą zawsze pojedynczych wyrazów) oraz (2) liczby wszystkich słów (uwaga! litera S na początku każdego zdania nie jest słowem). Podaj dwa polecenia pozwalające uzyskać te liczby.
+
+cat errors.m2 | grep -P "^A" | wc -l
+cat errors.m2 | grep -P "^S" | cut -d ' ' -f2- | wc -w
+
+
+3. Typy
+
+Chcemy określić typy błędów i ich liczność w pliku errors.m2. Podaj dwa polecenia: (1) pierwsze, które do pliku categories.txt zapisze wszystkie typy błędów występujące w korpusie bez powtórzeń, (2) drugie, które zliczy liczbę wystąpień poszczególnych typów błędów i zapisze je do pliku categories.freq.txt.
+
+cat errors.m2 | grep -P "^A" | cut -f3 | sort | uniq > categories.txt
+cat errors.m2 | grep -P "^A" | cut -f3 | sort | uniq -c > categories.freq.txt
+
+
+4. Piętnaście
+
+Podaj dwa polecenia: (1) pierwsze, które znajdzie wszystkie lata wzmiankowane w korpusie errors.m2 i zapisze je do plikuyears.txt; (2) drugie, znajdujące piętnaście najczęściej wzmiankowanych lat.
+
+cat errors.m2 | grep -P "^S" | grep -e '\b[1-9][0-9][0-9][0-9]\?' -oh > years.txt
